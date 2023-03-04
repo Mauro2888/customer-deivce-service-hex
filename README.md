@@ -1,4 +1,7 @@
 # customer-device-hex-version-api
+
+This api is an example but lacks in test, exception.
+
 ## post__api_v1_customer
 
 `POST /api/v1/customer`
