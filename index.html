@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map with Semaphore Image</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<img id="semaphore" src="https://example.com/semaphore-red.jpg" alt="Semaphore Image" />
+<script>
+    function initMap() {
+        var myLatLng = {lat: 46.11472373073822, lng: 13.088043420435753};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 8
+        });
+
+        // Create a custom semaphore marker
+        var semaphoreMarker = new google.maps.OverlayView();
+        semaphoreMarker.onAdd = function() {
+            var semaphore = document.getElementById('semaphore');
+            semaphore.style.position = 'absolute';
+            this.getPanes().overlayImage.appendChild(semaphore);
+        };
+        semaphoreMarker.draw = function() {
+            var projection = this.getProjection();
+            var position = projection.fromLatLngToDivPixel(myLatLng);
+            var semaphore = document.getElementById('semaphore');
+            semaphore.style.left = position.x + 'px';
+            semaphore.style.top = position.y + 'px';
+        };
+        semaphoreMarker.onRemove = function() {
+            var semaphore = document.getElementById('semaphore');
+            semaphore.parentNode.removeChild(semaphore);
+            semaphore = null;
+        };
+        semaphoreMarker.setMap(map);
+
+        // Switch the semaphore image every 3 seconds
+        var semaphore = document.getElementById('semaphore');
+        setInterval(function() {
+            if (semaphore.src.endsWith('-red.jpg')) {
+                semaphore.src = 'https://example.com/semaphore-green.jpg';
+            } else {
+                semaphore.src = 'https://example.com/semaphore-red.jpg';
+            }
+        }, 3000);
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5cXHZKffpzsEcDZJ9DlQtgvlq8hqxogs&callback=initMap"></script>
+</body>
+</html>
